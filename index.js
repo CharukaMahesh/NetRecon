@@ -1,175 +1,90 @@
 const makeWASocket = require('@whiskeysockets/baileys').default;
 const { useMultiFileAuthState, DisconnectReason } = require('@whiskeysockets/baileys');
-const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 
 async function connectToWhatsApp() {
     const authDir = 'auth_info';
-
-    // Create authentication state
     const { state, saveCreds } = await useMultiFileAuthState(authDir);
 
     const sock = makeWASocket({
         auth: state,
-        markOnlineOnConnect: true,
-        generateHighQualityLinkPreview: true,
-        printQRInTerminal: false, // We'll handle QR display ourselves
+        markOnlineOnConnect: true
     });
 
-    // Function to generate a random session ID
-    function generateSessionId() {
-        const prefix = "Queen-Ayodhya";
-        const randomChars = crypto.randomBytes(4).toString('hex').substring(0, 7);
-        return `${prefix}_${randomChars}`;
-    }
-
-    // Handle connection updates
+    // Connection updates
     sock.ev.on('connection.update', async (update) => {
-        const { connection, lastDisconnect, qr } = update;
-
-        if (qr) {
-            console.log('\n📌 Scan the QR code below to login:');
-            qrcode.generate(qr, { small: true });
-        }
+        const { connection, lastDisconnect } = update;
 
         if (connection === 'open') {
-            console.log('\n✅ Connected to WhatsApp successfully!');
+            console.log('✅ Queen-Ayodhya has been connected!');
 
-            // Generate and send session ID
-            try {
-                const sessionId = generateSessionId();
-                
-                // Save session ID to a file for future reference
-                fs.writeFileSync(
-                    path.join(__dirname, 'session_id.txt'), 
-                    `Session ID: ${sessionId}\nGenerated at: ${new Date().toLocaleString()}`
-                );
-
-                // Replace with your WhatsApp number (with country code + no spaces)
-                const ownerNumber = '94727270908@s.whatsapp.net';
-
-                await sock.sendMessage(ownerNumber, {
-                    text: `✅ Queen-Ayodhya Connected Successfully!\n\nYour Session ID: ${sessionId}\n\nKeep this ID safe for future reference.`
-                });
-
-                console.log("📤 Session ID sent to your WhatsApp number!");
-                console.log(`Your Session ID: ${sessionId}`);
-            } catch (err) {
-                console.error("❌ Failed to send session ID:", err);
-            }
+            // Send welcome message to yourself (replace with your number)
+            const ownerNumber = '94727270908@s.whatsapp.net';
+            await sock.sendMessage(ownerNumber, { text: '✅ Queen-Ayodhya Bot is online!' });
         }
 
         if (connection === 'close') {
             const reason = lastDisconnect?.error?.output?.statusCode;
-
-            if (reason === DisconnectReason.loggedOut) {
-                console.log('\n⚠️ Session expired. Generating a new QR code...');
-                fs.rmSync(path.join(__dirname, authDir), { recursive: true, force: true });
-                setTimeout(() => connectToWhatsApp(), 2000);
-            } else {
-                console.log('\n❌ Connection closed. Reconnecting...');
-                setTimeout(() => connectToWhatsApp(), 3000);
-            }
+            console.log('❌ Connection closed. Reconnecting...');
+            setTimeout(() => connectToWhatsApp(), 3000);
         }
     });
 
     // Save credentials
     sock.ev.on('creds.update', saveCreds);
 
-    // Helper: Extract text from different message types
+    // Helper: get text from different message types
     function getTextMessage(msg) {
-        if (!msg.message) return '';
-        
-        const messageTypes = [
-            'conversation',
-            'extendedTextMessage',
-            'imageMessage',
-            'videoMessage',
-            'documentMessage'
-        ];
-        
-        for (const type of messageTypes) {
-            if (msg.message[type]) {
-                if (type === 'extendedTextMessage') {
-                    return msg.message[type].text || '';
-                } else if (type === 'imageMessage' || type === 'videoMessage' || type === 'documentMessage') {
-                    return msg.message[type].caption || '';
-                } else {
-                    return msg.message[type] || '';
-                }
-            }
-        }
-        
-        return '';
+        return (
+            msg.message?.conversation ||
+            msg.message?.extendedTextMessage?.text ||
+            msg.message?.imageMessage?.caption ||
+            msg.message?.videoMessage?.caption ||
+            ''
+        );
     }
 
     // Handle incoming messages
-    sock.ev.on('messages.upsert', async ({ messages }) => {
-        const message = messages[0];
-        
-        // Ignore if message is empty, from status broadcast, or sent by the bot itself
-        if (!message.message || 
-            message.key.remoteJid === 'status@broadcast' || 
-            message.key.fromMe) {
-            return;
-        }
+    sock.ev.on('messages.upsert', async (m) => {
+        const message = m.messages[0];
 
-        const text = getTextMessage(message);
+        // Ignore status or messages without content
+        if (!message.message || message.key.remoteJid === 'status@broadcast') return;
+
         const from = message.key.remoteJid;
         const sender = message.pushName || 'Unknown';
+        const text = getTextMessage(message);
+
+        // Only respond to user messages (ignore bot's own messages)
+        if (message.key.fromMe) return;
 
         console.log(`📨 Message from ${sender}: ${text}`);
 
-        // Check if message is a command
-        if (text && text.startsWith('.')) {
+        if (text.startsWith('.')) {
             const command = text.slice(1).trim().toLowerCase();
-            
-            try {
-                switch (command) {
-                    case 'hello':
-                        await sock.sendMessage(from, { text: `Hello ${sender}! 👋 How can I help you?` });
-                        break;
-                    case 'help':
-                        await sock.sendMessage(from, {
-                            text: `🤖 Available commands:
-• .hello - Greet the bot
-• .help - Show this help message
-• .time - Get current time
-• .ping - Check if bot is alive
-• .session - Get your session ID`
-                        });
-                        break;
-                    case 'time':
-                        await sock.sendMessage(from, { text: `⏰ Current time: ${new Date().toLocaleString()}` });
-                        break;
-                    case 'ping':
-                        await sock.sendMessage(from, { text: '🏓 Pong! Bot is alive and working!' });
-                        break;
-                    case 'session':
-                        // Read session ID from file or generate a new one
-                        let sessionId;
-                        try {
-                            if (fs.existsSync(path.join(__dirname, 'session_id.txt'))) {
-                                const sessionFile = fs.readFileSync(path.join(__dirname, 'session_id.txt'), 'utf-8');
-                                const match = sessionFile.match(/Session ID: (.*)/);
-                                sessionId = match ? match[1] : generateSessionId();
-                            } else {
-                                sessionId = generateSessionId();
-                            }
-                        } catch {
-                            sessionId = generateSessionId();
-                        }
-                        await sock.sendMessage(from, { text: `🔑 Your Session ID: ${sessionId}` });
-                        break;
-                    default:
-                        await sock.sendMessage(from, { text: '❌ Unknown command. Type .help for available commands.' });
-                }
-                console.log(`✅ Executed command: ${command} for ${sender}`);
-            } catch (error) {
-                console.error(`❌ Error executing command ${command}:`, error);
-                await sock.sendMessage(from, { text: '❌ Sorry, there was an error processing your command.' });
+
+            switch (command) {
+                case 'hello':
+                    await sock.sendMessage(from, { text: `Hello ${sender}! 👋` });
+                    break;
+
+                case 'help':
+                    await sock.sendMessage(from, {
+                        text: '🤖 Commands:\n.hello\n.help\n.time\n.ping'
+                    });
+                    break;
+
+                case 'time':
+                    await sock.sendMessage(from, { text: `⏰ Current time: ${new Date().toLocaleString()}` });
+                    break;
+
+                case 'ping':
+                    await sock.sendMessage(from, { text: '🏓 Pong! Bot is alive.' });
+                    break;
+
+                default:
+                    await sock.sendMessage(from, { text: '❌ Unknown command. Type .help for commands.' });
             }
         }
     });
