@@ -88,7 +88,7 @@ async function connectToWhatsApp() {
 
                 case 'ping':
                     await sock.sendMessage(from, {
-                        text: '🏓 Pong! Bot is alive and working!',
+                        text: '🏓 Pong',
                     });
                     break;
 
