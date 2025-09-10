@@ -60,8 +60,6 @@ pip install .
 
 Alternative Installation Methods
 Using pip directly:
-
-bash
 pip install git+https://github.com/yourusername/netrecon.git
 Manual installation:
 
@@ -94,7 +92,6 @@ Options:
                           Scan type: arp, ping, or both
   -to, --timeout INTEGER  Timeout for each request (seconds)
   --help                  Show this message and exit
-  ```bash
 Example Output
 text
 Discovered Devices
