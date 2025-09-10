@@ -1,4 +1,4 @@
-#NetRecon
+<b>NetRecon</b>
 
 <p>A powerful Python network discovery scanner designed for ethical hackers and network administrators. NetRecon helps you quickly identify all devices connected to your network with detailed information presented in a clean, professional table format.</p>
 
@@ -33,7 +33,7 @@ Multiple Scan Techniques: ARP scanning (fast) and ICMP ping sweeping
 
 > Kali Linux Optimized: Works perfectly on security distributions
 
-#🚀 Installation
+🚀 <b>Installation</b
 <h3>Prerequisites</h3>
 > Python 3.8 or higher
 
