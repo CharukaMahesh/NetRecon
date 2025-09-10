@@ -1,4 +1,4 @@
-<b>NetRecon</b>
+# NetRecon
 
 <p>A powerful Python network discovery scanner designed for ethical hackers and network administrators. NetRecon helps you quickly identify all devices connected to your network with detailed information presented in a clean, professional table format.</p>
 
@@ -33,10 +33,26 @@ Multiple Scan Techniques: ARP scanning (fast) and ICMP ping sweeping
 
 > Kali Linux Optimized: Works perfectly on security distributions
 
-🚀 <b>Installation</b
+# 🚀Installation
 <h3>Prerequisites</h3>
 > Python 3.8 or higher
 
 > Linux/Kali Linux (Recommended)
 
 > Root privileges for packet capture
+
+Kali Linux Installation
+
+# Install system dependencies
+sudo apt update
+sudo apt install python3 python3-pip python3-venv
+
+# Clone and install NetRecon
+git clone https://github.com/yourusername/netrecon.git
+cd netrecon
+
+# Install with Poetry (recommended)
+poetry install
+
+# Or install with pip
+pip install .
