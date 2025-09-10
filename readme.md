@@ -35,19 +35,10 @@ A powerful Python network discovery scanner designed for ethical hackers and net
 
 ### Kali Linux Installation
 
-# 1. Update system packages
 ```bash
 sudo apt update
-
-# 2. Install Python and tools
 sudo apt install python3 python3-pip python3-venv
-
-# 3. Clone the repository
 git clone https://github.com/yourusername/netrecon.git
 cd netrecon
-
-# 4. Install with Poetry (recommended)
 poetry install
-
-# Alternative: install with pip
 pip install .
