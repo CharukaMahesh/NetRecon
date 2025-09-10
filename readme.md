@@ -43,6 +43,7 @@ Multiple Scan Techniques: ARP scanning (fast) and ICMP ping sweeping
 ### Kali Linux Installation
 
 # Update system packages
+```bash
 sudo apt update
 
 # Install Python and tools
