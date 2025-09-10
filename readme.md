@@ -43,16 +43,9 @@ Multiple Scan Techniques: ARP scanning (fast) and ICMP ping sweeping
 
 Kali Linux Installation
 
-# Install system dependencies
 sudo apt update
 sudo apt install python3 python3-pip python3-venv
-
-# Clone and install NetRecon
 git clone https://github.com/yourusername/netrecon.git
 cd netrecon
-
-# Install with Poetry (recommended)
 poetry install
-
-# Or install with pip
 pip install .
