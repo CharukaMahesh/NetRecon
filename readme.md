@@ -44,7 +44,7 @@ Multiple Scan Techniques: ARP scanning (fast) and ICMP ping sweeping
 ```bash
 # Update system packages
 sudo apt update
-
+```bash
 # Install Python and tools
 sudo apt install python3 python3-pip python3-venv
 
