@@ -1,10 +1,11 @@
 #NetRecon
-A powerful Python network discovery scanner designed for ethical hackers and network administrators. NetRecon helps you quickly identify all devices connected to your network with detailed information presented in a clean, professional table format.
 
-https://img.shields.io/badge/Network-Scanner-blue
-https://img.shields.io/badge/Python-3.8%252B-green
-https://img.shields.io/badge/License-MIT-yellow
-https://img.shields.io/badge/Platform-Linux%2520%257C%2520Kali-brightgreen
+<p>A powerful Python network discovery scanner designed for ethical hackers and network administrators. NetRecon helps you quickly identify all devices connected to your network with detailed information presented in a clean, professional table format.</p>
+
+<img src="https://img.shields.io/badge/Network-Scanner-blue">
+<img src="https://img.shields.io/badge/Python-3.8%252B-green">
+<img src="https://img.shields.io/badge/License-MIT-yellow">
+<imhg src="https://img.shields.io/badge/Platform-Linux%2520%257C%2520Kali-brightgreen">
 
 ⚠️ Legal Disclaimer
 NetRecon is designed for authorized security testing and educational purposes only.
