@@ -35,8 +35,8 @@ A powerful Python network discovery scanner designed for ethical hackers and net
 
 ### Kali Linux Installation
 
-```bash
 # 1. Update system packages
+```bash
 sudo apt update
 
 # 2. Install Python and tools
