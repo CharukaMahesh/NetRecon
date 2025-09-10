@@ -33,19 +33,27 @@ Multiple Scan Techniques: ARP scanning (fast) and ICMP ping sweeping
 
 > Kali Linux Optimized: Works perfectly on security distributions
 
-# 🚀Installation
-<h3>Prerequisites</h3>
-> Python 3.8 or higher
+# 🚀 Installation
 
-> Linux/Kali Linux (Recommended)
+### Prerequisites
+- **Python 3.8 or higher**
+- **Linux/Kali Linux** (Recommended)
+- **Root privileges** for packet capture
 
-> Root privileges for packet capture
-
-Kali Linux Installation
-
+### Kali Linux Installation
+```bash
+# Update system packages
 sudo apt update
+
+# Install Python and tools
 sudo apt install python3 python3-pip python3-venv
+
+# Clone the repository
 git clone https://github.com/yourusername/netrecon.git
 cd netrecon
+
+# Install with Poetry (recommended)
 poetry install
+
+# Alternative: install with pip
 pip install .
