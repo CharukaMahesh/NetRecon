@@ -42,3 +42,9 @@ git clone https://github.com/yourusername/netrecon.git
 cd netrecon
 poetry install
 pip install .
+```
+### Alternative Installation Methods
+
+# Using pip directly:
+```bash
+pip install git+https://github.com/yourusername/netrecon.git
