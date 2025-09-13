@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can You Hack Me?</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 50px;
+            transition: background-color 0.5s ease;
+        }
+        h1 { color: #333; }
+        p { color: #666; }
+        .hacked {
+            background-color: #ff4444 !important;
+        }
+        .hacked h1 {
+            color: #000 !important;
+            content: "HACKED BY [YOUR NAME]!";
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Target</h1>
+    <p>This is a simple webpage hosted on GitHub Pages.</p>
+    <p><strong>Your Mission:</strong> Use Kali Linux to intercept your browser's traffic and change this content before it reaches you.</p>
+    <p>Good luck, hacker!</p>
+
+    <br><hr><br>
+
+    <!-- A simple form to make the traffic more interesting -->
+    <h3>Login (It's fake!)</h3>
+    <form action="/submit" method="GET">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" value="admin"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" value="password123"><br><br>
+        <input type="submit" value="Login">
+    </form>
+
+    <script>
+        // Simple script to show an alert on form submit
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Stop the form from actually submitting
+            alert('This form does nothing. Try intercepting this request with Burp Suite!');
+        });
+    </script>
+</body>
+</html>
